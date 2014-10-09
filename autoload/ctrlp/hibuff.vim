@@ -1,13 +1,63 @@
+" File: autoload/ctrlp/hibuff.vim
+" Author: Sergey Vlasov <sergey@vlasov.me>
+" Last Change: 2014-10-09
+" Version: 0.2
+"
+" Changelog:
+" 0.2 default colors
+
 if ( exists('g:loaded_ctrlp_hibuff') && g:loaded_ctrlp_hibuff )
 \    || v:version < 700 || &cp
 	finish
 endif
 let g:loaded_ctrlp_hibuff = 1
 
+func HlExists(hl)
+	if !hlexists(a:hl)
+		return 0
+	endif
+	redir => hlstatus
+		exe "silent hi" a:hl
+	redir END
+	return (hlstatus !~ "cleared")
+endfunc
+
+if !HlExists('CtrlPHiBuffNr')
+	hi def link CtrlPHiBuffNr Constant
+endif
+
+if !HlExists('CtrlPHiBuffHid')
+	hi def link CtrlPHiBuffHid Comment
+endif
+
+if !HlExists('CtrlPHiBuffHidMod')
+	hi def link CtrlPHiBuffHidMod String
+endif
+
+if !HlExists('CtrlPHiBuffVis')
+	hi def link CtrlPHiBuffVis Normal
+endif
+
+if !HlExists('CtrlPHiBuffVisMod')
+	hi def link CtrlPHiBuffVisMod Identifier
+endif
+
+if !HlExists('CtrlPHiBuffCur')
+	hi def link CtrlPHiBuffCur Question
+endif
+
+if !HlExists('CtrlPHiBuffCurMod')
+	hi def link CtrlPHiBuffCurMod WarningMsg
+endif
+
+if !HlExists('CtrlPHiBuffPath')
+	hi def link CtrlPHiBuffPath Comment
+endif
+
 cal add(g:ctrlp_ext_vars, {
 	\ 'init': 'ctrlp#hibuff#init(s:crbufnr)',
 	\ 'accept': 'ctrlp#hibuff#accept',
-	\ 'lname': 'hi buffers',
+	\ 'lname': 'hibuff',
 	\ 'sname': 'hibuff',
 	\ 'type': 'line',
 	\ 'sort': 0,
