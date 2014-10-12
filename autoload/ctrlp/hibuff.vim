@@ -70,12 +70,34 @@ fu! ctrlp#hibuff#id()
     retu s:id
 endf
 
+
+" The action to perform on the selected string.
+"
+" Arguments:
+"  a:mode   the mode that has been chosen by pressing <cr> <c-v> <c-t> or <c-x>
+"           the values are 'e', 'v', 't' and 'h', respectively
+"  a:str    the selected string
 fu! ctrlp#hibuff#accept(mode, str)
 	let bufnr = matchstr(a:str, '^\s*\zs\d\+')
-
+	let bufnr = str2nr(bufnr)
 	if (a:mode == 'h')
-		exec ":bd ". bufnr
-		call feedkeys("\<f5>")
+		call ctrlp#exit()
+		exec ":sbuffer ". bufnr
+		" exec ":bd ". bufnr
+		" call feedkeys("\<f5>") " why is this here??? <f5> might be mapped to *anything*
+	elseif a:mode == "e"
+		call ctrlp#exit()
+		exec ":b ". bufnr
+	elseif a:mode == "v"
+		call ctrlp#exit()
+		exec ":vert sbuffer ". bufnr
+	elseif a:mode == "s"
+		call ctrlp#exit()
+		exec ":sbuffer ". bufnr
+	elseif a:mode == "t"
+		call ctrlp#exit()
+	    let bufname = bufname(bufnr)
+		exec ":tab sbuffer ". fnameescape(bufname)
 	else
 		call ctrlp#exit()
 		exec ":b ". bufnr
